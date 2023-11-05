@@ -5,9 +5,6 @@ import boto3
 from botocore.exceptions import ClientError
 import os
 import logging
-# Current limitations is that it needs to be 
-# run in sudo
-# and need aws cli installed
 
 # Sourced from 
 # https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-uploading-files.html
@@ -72,11 +69,13 @@ def sniffy():
     print("Logging IP addresses...")
     # Continuously sniff packets and save IPs every hour
     while True:
-        sniff(prn=packet_callback, filter="ip", iface="en0", store=0, timeout=20)
+        sniff(prn=packet_callback, filter="ip", iface="en0", store=0, timeout=60)
         save_ips_to_file()
         if not upload_file("ip_log.txt", "comp6441-sap", "device_01.txt"):
             print("Upload failed")
-    # This script will run indefinitely. Every hour, it will save the new IP addresses to the "ips.txt" file and then continue sniffing. Private IP addresses are excluded from being saved to the file.
+    # This script will run indefinitely. Every minute, it will save the new IP addresses 
+    # to the "ip_log.txt" file and then continue sniffing. Private IP addresses are 
+    # excluded from being saved to the file.
 
 sniffy()
 
